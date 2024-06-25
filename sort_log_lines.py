@@ -16,7 +16,7 @@ if __name__ == '__main__':
     with open(output_file, 'w') as f:
         # Write header
         f.write(lines[0])
-        f.write("Index       Time                           Information     FAA        (Block, Page, Die, Frag)\n")
+        f.write("Index         Time                           Information     FAA        (Block, Page, Die, Frag)\n")
         f.write("----------------------------------------------------------------------------------------------\n")
 
         for line in sorted_lines:
@@ -28,5 +28,5 @@ if __name__ == '__main__':
                 continue
 
             faa_set.add(faa_tuple)
-            result_line = f'{line.strip()} ({block:>5}, {page:>4}, {die:>3}, {frag:>4})\n'
+            result_line = f'{line.strip('\n')} ({block:>5}, {page:>4}, {die:>3}, {frag:>4})\n'
             f.write(result_line)

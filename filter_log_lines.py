@@ -12,7 +12,7 @@ if __name__ == '__main__':
     with open(output_file, 'w') as f:
         # Write header
         f.write(lines[0])
-        f.write("Index       Time                           Information     FAA       \n")
+        f.write("Index         Time                           Information     FAA       \n")
         f.write("---------------------------------------------------------------------\n")
         for line in filtered_lines:
-            f.write(line.lstrip())
+            f.write(line)
