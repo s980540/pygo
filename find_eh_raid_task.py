@@ -37,7 +37,7 @@ def find_eh_raid_task(file_path: str) -> None:
 
     try:
         # Read the log file
-        with open(file_path, "r") as infile:
+        with open(file_path, "r", encoding='utf-8', errors='ignore') as infile:
             lines = infile.readlines()
     except FileNotFoundError:
         logging.error(f"File not found: {file_path}")
@@ -47,7 +47,7 @@ def find_eh_raid_task(file_path: str) -> None:
         return
 
     # Define the pattern to match the specific log line format
-    pattern = re.compile(r"\[.*?\] EH-RAID-Task:(\d+) (\d+) (\w+) (\w+)")
+    pattern = re.compile(r"\[.*?\] EH-RAID-Task:(\w+) (\w+) (\w+) (\w+)")
 
     # List to store the extracted values as tuples
     data = []
@@ -56,10 +56,10 @@ def find_eh_raid_task(file_path: str) -> None:
     for line in lines:
         match = pattern.search(line)
         if match:
-            desc_id = match.group(1)  # Extract descriptor ID
-            cb_id = match.group(2)  # Extract callback ID
-            faa = match.group(3)  # Extract FAA field
-            status = match.group(4)  # Extract status
+            desc_id = match.group(1)    # Extract descriptor ID
+            cb_id   = match.group(2)    # Extract callback ID
+            faa     = match.group(3)    # Extract FAA field
+            status  = match.group(4)    # Extract status
             data.append((desc_id, cb_id, faa, status))
 
     # Create a DataFrame from the extracted data
@@ -72,6 +72,9 @@ def find_eh_raid_task(file_path: str) -> None:
     except Exception as e:
         logging.error(f"Error processing FAA data: {e}")
         return
+
+    # Remove duplicate 'faa' values
+    df = df.drop_duplicates(subset=["faa"])
 
     lun_shift = 1
     ce_shift = 2
